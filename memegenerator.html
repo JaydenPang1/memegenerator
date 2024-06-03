@@ -1,0 +1,56 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meme Generator</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 20px; }
+        #meme-container { position: relative; display: inline-block; }
+        img { max-width: 100%; }
+        .text { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: white; }
+        label { font-size: 20px; }
+        input[type="text"], input[type="file"] { font-size: 18px; padding: 8px; border-radius: 5px; border: 1px solid #999; }
+        button { background-color: #4CAF50; color: white; padding: 12px 24px; border: none; border-radius: 5px; cursor: pointer; font-size: 20px; }
+        button:hover { background-color: #45a049; }
+    </style>
+</head>
+<body>
+    <h1>Meme Generator</h1>
+    <form id="meme-form">
+        <label for="bottom-text">Bottom Text:</label>
+        <input type="text" id="bottom-text" name="bottom-text">
+        <br>
+        <input type="file" id="image-upload" accept="image/*">
+        <br>
+        <button type="submit">Generate Meme</button>
+    </form>
+    <div id="meme-container"></div>
+
+    <script>
+        const form = document.getElementById('meme-form');
+        const memeContainer = document.getElementById('meme-container');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const bottomText = document.getElementById('bottom-text').value;
+            const file = document.getElementById('image-upload').files[0];
+            if (!file) { alert('Please select an image file.'); return; }
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const imageUrl = event.target.result;
+                const meme = document.createElement('img');
+                meme.src = imageUrl;
+                meme.alt = 'Meme Image';
+                memeContainer.innerHTML = '';
+                memeContainer.appendChild(meme);
+                const bottomTextDiv = document.createElement('div');
+                bottomTextDiv.classList.add('text');
+                bottomTextDiv.textContent = bottomText;
+                memeContainer.appendChild(bottomTextDiv);
+            };
+            reader.readAsDataURL(file);
+            form.reset();
+        });
+    </script>
+</body>
+</html>
